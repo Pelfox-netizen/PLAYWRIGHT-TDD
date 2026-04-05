@@ -2,25 +2,27 @@ import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   timeout: 60000,
-  retries: 1,
+  retries: 0,
   testDir: "tests/e2e",
   use: {
     headless: false,
-    viewport: {
-      width: 1280,
-      height: 720,
+
+    launchOptions: {
+      args: ["--start-maximized"],
     },
     actionTimeout: 10000,
     ignoreHTTPSErrors: true,
     video: "off",
     screenshot: "off",
   },
-  // npx playwright test --config=playwright.config.ts --projects=Chromium
   projects: [
     {
       name: "Chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        //  ...devices["Desktop Chrome"]
+        viewport: null,
+      },
     },
   ],
-  reporter: "html",
+  //reporter: "html",
 });
