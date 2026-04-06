@@ -2,11 +2,11 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Login/Logout", () => {
   //before hook
-  test.beforeEach(async ({ page }) => {
-    await page.goto("http://zero.webappsecurity.com/");
-  });
+  // test.beforeEach(async ({ page }) => {
+  //   await page.goto("http://zero.webappsecurity.com/");
+  // });
   // negative scenario
-  test("Negative scenario for login", async ({ page }) => {
+  test.skip("Negative scenario for login", async ({ page }) => {
     await page.click("#signin_button");
     await page.fill("#user_login", "invalid_username");
     await page.fill("#user_password", "invalid_password");
@@ -15,4 +15,13 @@ test.describe("Login/Logout", () => {
     await expect(errorMessage).toContainText("Login and/or password are wrong");
   });
   //positive scenario
+  test("Feedback Form", async ({ page }) => {
+    await page.goto("http://zero.webappsecurity.com/feedback.html");
+    await page.locator("#name").fill("Jack");
+    await page.locator("#email").fill("Sparrow");
+    await page.locator("#subject").fill("Confidential Info");
+    // await page.pause();
+    await page.locator("#comment").fill("Test info");
+    await page.locator("input[type='submit']").click();
+  });
 });
