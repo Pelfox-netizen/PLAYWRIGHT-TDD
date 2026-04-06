@@ -5,7 +5,7 @@ export default defineConfig({
   retries: 0,
   testDir: "tests/e2e",
   use: {
-    headless: false,
+    headless: true,
 
     launchOptions: {
       args: ["--start-maximized"],
@@ -24,5 +24,9 @@ export default defineConfig({
       },
     },
   ],
-  //reporter: "html",
+  reporter: [
+    ["list"],
+    ["html", { outputFolder: "playwright-report" }],
+    ["junit", { outputFile: "test-results/junit.xml" }],
+  ],
 });

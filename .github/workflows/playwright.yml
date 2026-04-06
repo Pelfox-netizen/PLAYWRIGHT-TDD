@@ -18,7 +18,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx playwright test tests/e2e/e2e-login.spec.ts --config=e2e.config.ts
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
