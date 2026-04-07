@@ -21,9 +21,13 @@ jobs:
         run: npx playwright test tests/e2e/e2e-login.spec.ts --config=e2e.config.ts
       - name: Import results to AgileTest
         if: always()
+        env:
+          AGILETEST_TOKEN: ${{ secrets.JIRA_API_TOKEN }} # your API token from AgileTest
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }} # e.g. https://yourcompany.atlassian.net
+          PROJECT_KEY: ${{ secrets.PROJECT_KEY }} # e.g. MYPROJ
         run: |
           curl -X POST \
-          -u "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
-          -H "Accept: application/json" \
-          -F "file=@test-results/junit.xml" \
-          "${{ secrets.JIRA_BASE_URL }}/rest/atm/1.0/ds/test-executions/junit"
+          "${JIRA_BASE_URL}/ds/test-executions/junit?projectKey=${PROJECT_KEY}" \
+          -H "Content-Type: application/xml" \
+          -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+          --data-binary "@test-results/junit.xml"
