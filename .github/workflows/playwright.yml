@@ -22,12 +22,19 @@ jobs:
       - name: Import results to AgileTest
         if: always()
         env:
-          AGILETEST_TOKEN: ${{ secrets.JIRA_API_TOKEN }} # your API token from AgileTest
-          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }} # e.g. https://yourcompany.atlassian.net
-          PROJECT_KEY: ${{ secrets.PROJECT_KEY }} # e.g. MYPROJ
+          AGILETEST_CLIENT_ID: ${{ secrets.AGILETEST_CLIENT_ID }}
+          AGILETEST_CLIENT_SECRET: ${{ secrets.AGILETEST_CLIENT_SECRET }}
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          PROJECT_KEY: ${{ secrets.PROJECT_KEY }}
         run: |
+          TOKEN=$(curl -s -X POST \
+          'https://agiletest.atlas.devsamurai.com/api/apikeys/authenticate' \
+          -H 'Content-Type: application/json' \
+          -d "{\"clientId\":\"${AGILETEST_CLIENT_ID}\",\"clientSecret\":\"${AGILETEST_CLIENT_SECRET}\"}" \
+          | tr -d '"')
+
           curl -X POST \
           "${JIRA_BASE_URL}/ds/test-executions/junit?projectKey=${PROJECT_KEY}" \
           -H "Content-Type: application/xml" \
-          -H "Authorization: Bearer ${AGILETEST_TOKEN}" \
+          -H "Authorization: JWT ${TOKEN}" \
           --data-binary "@test-results/junit.xml"
