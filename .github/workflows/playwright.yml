@@ -29,5 +29,5 @@ jobs:
           curl -X POST \
           "${JIRA_BASE_URL}/ds/test-executions/junit?projectKey=${PROJECT_KEY}" \
           -H "Content-Type: application/xml" \
-          -H "Authorization: Bearer ${JIRA_API_TOKEN}" \
+          -H "Authorization: Bearer ${AGILETEST_TOKEN}" \
           --data-binary "@test-results/junit.xml"
